@@ -112,8 +112,19 @@ Character.prototype.fight = function(){     //
   var critChance = this.tactics;
 };
 
-Character.prototype.takeDamage = function(){ //
+Character.prototype.takeDamage = function(damage){ //
+  this.hitPoints -= damage;
+  this.displayAll();
+};
 
+Character.prototype.heal = function(healing){
+  if(this.hitPoints + healing > 100){
+    this.hitPoints = 100;
+  }
+  else{
+    this.hitPoints += healing;
+  }
+  this.displayAll();
 };
 
 Character.prototype.run = function(){     //
@@ -149,6 +160,26 @@ Character.prototype.displayAll = function(){
   $("#showTactics").text(this.tactics)
   $("#showHiding").text(this.hiding)
   $("#showLocationName").text(game.gameMap[this.location].name)
+  $("#HP").text('');
+  $("#missingHP").text('');
+  for(var i = 0; i<100; i++){
+    if(this.hitPoints > i){
+      $("#HP").append("|");
+    }
+    else{
+      $("#missingHP").append("|");
+    };
+    $("#HP").removeClass();
+    if(this.hitPoints > 50){
+      $("#HP").addClass("green");
+    }
+    else if(this.hitPoints > 30){
+      $("#HP").addClass("yellow");
+    }
+    else{
+      $("#HP").addClass("red");
+    };
+  };
 
 };
 
@@ -179,13 +210,13 @@ $(function(){
     event.preventDefault();
     character.location --;
     $("#location").text(map[character.location].description);
-    character.displayAll();
+    character.heal(5);
   });
 
   $("#forwardButton").click(function(){
     event.preventDefault();
     character.location ++;
     $("#location").text(map[character.location].description);
-    character.displayAll();
+    character.heal(5);
   });
 });
