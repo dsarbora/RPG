@@ -1,6 +1,15 @@
+function Game(characters, gameMap){
+  this.characters = [],
+  this.gameMap = []
+}
 
+Game.prototype.createWarrior = function(){
+  var warrior = new Character("You", 60, 60, 35, 15, 50, 50, 50, 10);
+  this.characters.push(warrior);
 
-var gameMap = [];
+}
+
+var game = new Game();
 
 function MapLocation(name, description, location, items, monsters, exits){
   this.name = name,
@@ -12,7 +21,7 @@ function MapLocation(name, description, location, items, monsters, exits){
 }
 
 MapLocation.prototype.addMapLocation = function (){
-    gameMap.push(this);
+    game.gameMap.push(this);
 };
 
 var city1 = new MapLocation ("Citadel", "You are standing in a large town square. All around people are cheering for you.", 0);
@@ -128,7 +137,19 @@ Character.prototype.changeWeapon = function(weapon){   //    CHANGE WEAPON, GETS
 Character.prototype.disarmWeapon = function(){       //DISARMS WEAPON, PUSHES TO INVENTORY
   this.inventory.push(this.weapon[0])
   this.weapon.shift();
-}
+};
+
+Character.prototype.displayAll = function(){
+  $("#showHitPoints").text(this.hitPoints)
+  $("#showStrength").text(this.strength)
+  $("#showDexterity").text(this.dexterity)
+  $("#showIntelligence").text(this.intelligence)
+  $("#showSwordsmanship").text(this.swordsmanship)
+  $("#showTactics").text(this.tactics)
+  $("#showHiding").text(this.hiding)
+  $("#showLocationName").text(game.gameMap[this.location].name)
+
+};
 
 /*Character.prototype.move = function(){   //       !!! NEEDS A BUTTON ON THE PAGE TO GIVE AN ID FOR FORWARD, NO ID NEEDED FOR BACK- STATEMENT WILL READ IF(ID)
   if(){
@@ -140,13 +161,23 @@ Character.prototype.disarmWeapon = function(){       //DISARMS WEAPON, PUSHES TO
 
   }
 }*/
-var character = new Character();
-
+game.createWarrior()
 $(function(){
+  var map = game.gameMap;
+  var character = game.characters[0]
+  $("#location").text(map[character.location].description);
+  character.displayAll();
+  $("#backButton").click(function(){
+    event.preventDefault();
+    character.location --;
+    $("#location").text(map[character.location].description);
+    character.displayAll();
+  });
 
   $("#forwardButton").click(function(){
     event.preventDefault();
     character.location ++;
-    $("#location").text(gameMap[character.location].description);
+    $("#location").text(map[character.location].description);
+    character.displayAll();
   });
 });

@@ -9,10 +9,42 @@
     <title></title>
   </head>
   <body>
-    <div id = "locationDisplay">
-      <span id = "location"></span>
+    <div class = "container">
+    <div class = "row">
+      <div class = "col-md-10" id = "mainDisplay">
+        <div class = "row">
+          <div class ="col-md-3 well">
+            <div id = "statsDisplay">
+              <p id = "hitPoints">Hitpoints: <span id = "showHitPoints"></span></p>
+              <p id = "strength">Strength: <span id = "showStrength"></span></p>
+              <p id = "dexterity">Dexterity: <span id = "showDexterity"></span></p>
+              <p id = "intelligence">Intelligence: <span id = "showIntelligence"></span></p>
+              <p id = "swordsmanship">Swordsmanship: <span id = "showSwordsmanship"></span></p>
+              <p id = "tactics">Tactics: <span id = "showTactics"></span></p>
+              <p id = "hiding">Hiding: <span id = "showHiding"></span></p>
+              <p id = "locationName">Location: <span id = "showLocationName"></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class = "col-md-2 well" id = "locationDisplayBox">
+        <div id = "locationDisplay">
+          <span id = "location"></span>
+        </div>
+      </div>
     </div>
-    <button id = "forwardButton" class = "btn btn-success">Forward</button>
+    <div class = "row">
+      <div class = "col-md-10">
+      </div>
+      <div class = "col-md-2" id = "buttonDisplayBox">
+        <div id = "buttons">
+          <button id = "backButton" class = "btn btn-info">Back</button>
+          <button id = "forwardButton" class = "btn btn-success">Forward</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   </body>
 </html>
