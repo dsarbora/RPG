@@ -1,7 +1,5 @@
 #locationDisplayBox{
-  height: 300px;
   float: right;
-  border: 2px solid black;
 }
 #locationDisplay{
   padding-top: 30px;
@@ -9,17 +7,23 @@
 
 }
 #statsDisplay{
-  border: 1px solid black;
-  height: 300px;
+
 }
 
 #buttonDisplayBox{
   float: right;
-  border: 2px solid black;
 }
 #mainDisplayBox{
-  border: 1px solid black;
-  height: 600px;
+
+}
+#fightDisplay{
 }
 #buttons{
+}
+#name{
+  text-align: center;
+  font-weight: bold;
+}
+.well{
+  height: 300px;
 }

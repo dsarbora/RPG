@@ -140,6 +140,7 @@ Character.prototype.disarmWeapon = function(){       //DISARMS WEAPON, PUSHES TO
 };
 
 Character.prototype.displayAll = function(){
+  $("#showName").text(this.name)
   $("#showHitPoints").text(this.hitPoints)
   $("#showStrength").text(this.strength)
   $("#showDexterity").text(this.dexterity)
@@ -150,6 +151,10 @@ Character.prototype.displayAll = function(){
   $("#showLocationName").text(game.gameMap[this.location].name)
 
 };
+
+Character.prototype.askName = function(){
+  this.name = prompt("What is your name traveller?");
+}
 
 /*Character.prototype.move = function(){   //       !!! NEEDS A BUTTON ON THE PAGE TO GIVE AN ID FOR FORWARD, NO ID NEEDED FOR BACK- STATEMENT WILL READ IF(ID)
   if(){
@@ -163,8 +168,11 @@ Character.prototype.displayAll = function(){
 }*/
 game.createWarrior()
 $(function(){
+
   var map = game.gameMap;
   var character = game.characters[0]
+
+  character.askName();
   $("#location").text(map[character.location].description);
   character.displayAll();
   $("#backButton").click(function(){
