@@ -20,3 +20,18 @@ function Item(name, type, number, healing){
   this.number = number,
   this.healing = healing
 }
+
+
+Item.prototype.displayItem = function(){
+  if(this){
+    $("#items").text(this.name);
+    $("#getButton").show();
+  }
+  else{
+    $("#items").text('');
+    $("#getButton").hide();
+  };
+};
+
+var sword = new Item("Sword", "ruin", 10, 3, 10, "Dragon Slaying");
+game.getItem(sword);

@@ -9,14 +9,18 @@ $("#startGame").click(function(){
 });
 $("#nameForm").submit(function(){
   event.preventDefault();
+  var name = $("#userName").val();
+  character.askName(name);
   $("#preGameScreen").hide();
   $("#gameScreen").fadeIn();
+  character.displayAll();
 });
   map[4].spawnMonster(2);
   map[6].spawnMonster(1);
   map[9].spawnMonster(3);
   map[8].spawnMonster(0);
   map[7].spawnMonster(4);
+  map[4].spawnItem(0);
 
   map[character.location].getExits();
   //character.askName();
@@ -50,7 +54,21 @@ $("#nameForm").submit(function(){
     character.move("forward");
   });
 
+  $("#getButton").click(function(){
+    character.get();
+    $("#items").text('')
+    $("#getButton").fadeOut();
+
+  });
+
   $("#fightButton").click(function(){
     character.fight(map[character.location].monsters[0]);
+  });
+
+  $("#userInputForm").submit(function(){
+    event.preventDefault();
+    var userInput = $("#userInput").val();
+    $("#userInput").val('')
+    alert(userInput);
   });
 });

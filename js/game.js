@@ -1,8 +1,9 @@
 
 
-function Game(characters, monsters, gameMap){
+function Game(characters, monsters, items, gameMap){
   this.characters = [],
   this.monsters = [],
+  this.items = [],
   this.gameMap = []
 }
 
@@ -15,6 +16,10 @@ Game.prototype.getMonster = function(monster){
   this.monsters.push(monster);
 };
 
+Game.prototype.getItem = function(item){
+  this.items.push(item);
+};
+
 Game.prototype.getMap = function(mapLocation){
   this.gameMap.push(mapLocation);
 };
@@ -22,7 +27,7 @@ Game.prototype.getMap = function(mapLocation){
 Game.prototype.isDead = function(){
   $("#gameScreen").hide();
   $("#deathScreen").fadeIn();
-}
+};
 
 //========================================================
 var game = new Game();

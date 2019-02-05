@@ -62,7 +62,7 @@ Character.prototype.run = function(){     //
 };
 
 Character.prototype.displayWeapon = function(){  // DISPLAYS ARMED WEAPON IN HTML
-  $("#displayWeapon").text(this.weapon[0])
+  $("#displayWeapon").text(this.weapon[0].name)
 }
 
 Character.prototype.armWeapon = function(weapon){    //  ARM WEAPON, ONE WEAPON AT A TIME
@@ -120,8 +120,8 @@ Character.prototype.displayAll = function(){
 
 };
 
-Character.prototype.askName = function(){
-  this.name = prompt("What is your name?");
+Character.prototype.askName = function(input){
+  this.name = input;
 }
 
 Character.prototype.move = function(input){   //       !!! NEEDS A BUTTON ON THE PAGE TO GIVE AN ID FOR FORWARD, NO ID NEEDED FOR BACK- STATEMENT WILL READ IF(ID)
@@ -137,10 +137,18 @@ Character.prototype.move = function(input){   //       !!! NEEDS A BUTTON ON THE
 
   $("#location").text(game.gameMap[this.location].description);
   game.gameMap[this.location].displayExtras();
-  this.heal(5);
+  this.heal(3);
   game.gameMap[this.location].getExits();
+  $("#items").text('');
+  game.gameMap[this.location].items.forEach(function(item){
+    item.displayItem();
+  });
 };
 
-
+Character.prototype.get = function(){
+  $("#items").text('');
+  character.inventory.push(map[character.location].items[0]);
+  map[character.location].items.shift();
+};
 
 game.getPlayer()

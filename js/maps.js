@@ -43,7 +43,7 @@ game.getMap(mountainTop);
 
 MapLocation.prototype.displayExtras = function(){
   $("#fightLog").text('');
-  $("#additionalMapFeatures").text('');
+  $("#monsters").text('');
   if(this.monsters[0] && this.monsters[0].hp > 0){
     $("#fightButton").show();
   }
@@ -53,11 +53,11 @@ MapLocation.prototype.displayExtras = function(){
   for (var i = 0; i<this.monsters.length; i++){
     if(!this.monsters[i].checkDead()){
       $("#fightLog").append(this.monsters[i].name +  ": " + this.monsters[i].hp + "HP" + "<br>");
-      $("#additionalMapFeatures").append("A " + this.monsters[i].name + " lurks around you. <br>")
+      $("#monsters").append("A " + this.monsters[i].name + " lurks around you. <br>")
     }
     else{
       $("#fightLog").append(this.monsters[i].name +  ": corpse"  + "<br>");
-      $("#additionalMapFeatures").append("A " + this.monsters[i].name + " is dead. <br>")
+      $("#monsters").append("A " + this.monsters[i].name + " is dead. <br>")
     };
   };
 };
@@ -78,6 +78,25 @@ MapLocation.prototype.spawnMonster = function(number){
   }
   else if (number == 4){
     this.monsters.push(game.monsters[4]);
+  };
+  this.displayExtras();
+};
+
+MapLocation.prototype.spawnItem = function(number){
+  if (number == 0){
+    this.items.push(game.items[0])
+  }
+  else if (number == 1){
+    this.items.push(game.items[1]);
+  }
+  else if (number == 2){
+    this.items.push(game.items[2]);
+  }
+  else if (number == 3){
+    this.items.push(game.items[3]);
+  }
+  else if (number == 4){
+    this.items.push(game.items[4]);
   };
   this.displayExtras();
 };
