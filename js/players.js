@@ -36,6 +36,7 @@ Character.prototype.fight = function(monster){
 Character.prototype.checkDead = function(){
   if(this.hp < 1){
     console.log("You are dead.");
+    game.isDead();
   }
 };
 
