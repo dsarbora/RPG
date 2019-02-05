@@ -9,7 +9,7 @@
     <script src =  "js/monsters.js"></script>
     <script src = "js/maps.js"></script>
     <script src = "js/players.js"></script>
-    <script src = js/scripts.js></script>
+    <script src = "js/scripts.js"></script>
     <meta charset="utf-8">
     <title></title>
   </head>
@@ -72,6 +72,7 @@
       </div>
       <div class = "col-md-5 well">
         <div id = "climb">
+          <button id = "armButton" class = "btn btn-info">Arm <span class = "weaponName"></span></button>
           <button id = "getButton" class = "btn btn-info">Get <span class = "getButtonFiller"></span></p>
           <button id = "fleeButton" class = "btn btn-warning">Flee</button>
           <button id = "fightButton" class = "btn btn-danger">Fight</button>
@@ -100,7 +101,7 @@
   </div>
 </div>
 
-  <div id = "deathScreen">
+  <div id = "deathScreen" class = "wrapper">
     <h1>You are dead.</h1>
     <a href = "index.html"><h3>Start over.</h3></a>
   </div>

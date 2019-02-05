@@ -33,5 +33,6 @@ Item.prototype.displayItem = function(){
   };
 };
 
+var bareHands = new Item("Bare hands", "none", 10, 3)
 var sword = new Item("Sword", "ruin", 10, 3, 10, "Dragon Slaying");
 game.getItem(sword);

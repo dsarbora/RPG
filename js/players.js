@@ -10,7 +10,7 @@ function Character(name, hp, damage, strength, dexterity, intelligence, courage,
   this.swordsmanship = swordsmanship,
   this.tactics = tactics,
   this.hiding = hiding,
-  this.weapon = ["Bare Hands"],
+  this.weapon = [bareHands],
   this.inventory = [],
   this.location = 0,
   this.previousLocations = previousLocations
@@ -36,7 +36,7 @@ Character.prototype.fight = function(monster){
 Character.prototype.checkDead = function(){
   if(this.hp < 1){
     console.log("You are dead.");
-    game.isDead();
+    this.isDead();
   }
 };
 
@@ -66,7 +66,7 @@ Character.prototype.displayWeapon = function(){  // DISPLAYS ARMED WEAPON IN HTM
 }
 
 Character.prototype.armWeapon = function(weapon){    //  ARM WEAPON, ONE WEAPON AT A TIME
-  if(this.weapon[0] == "Bare Hands"){
+  if(this.weapon[0] == bareHands){
     this.weapon.unshift(weapon);
   }
   else{
@@ -149,6 +149,15 @@ Character.prototype.get = function(){
   $("#items").text('');
   character.inventory.push(map[character.location].items[0]);
   map[character.location].items.shift();
+};
+
+Character.prototype.displayArmButton = function(){
+  $("#armButton").show();
+}
+
+Character.prototype.isDead = function(){
+  $("#gameScreen").hide();
+  $("#deathScreen").fadeIn();
 };
 
 game.getPlayer()

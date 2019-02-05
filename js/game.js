@@ -24,10 +24,7 @@ Game.prototype.getMap = function(mapLocation){
   this.gameMap.push(mapLocation);
 };
 
-Game.prototype.isDead = function(){
-  $("#gameScreen").hide();
-  $("#deathScreen").fadeIn();
-};
+
 
 //========================================================
 var game = new Game();

@@ -23,8 +23,6 @@ $("#nameForm").submit(function(){
   map[11].spawnMonster(5)
   map[4].spawnItem(0);
 
-  map[character.location].getExits();
-  //character.askName();
 
   $("#location").text(map[character.location].description);
 
@@ -59,8 +57,14 @@ $("#nameForm").submit(function(){
     character.get();
     $("#items").text('')
     $("#getButton").fadeOut();
+    character.displayArmButton();
 
   });
+
+  $("#armButton").click(function(){
+    character.armWeapon(character.inventory[0]);
+    $("#armButton").hide();
+  })
 
   $("#fightButton").click(function(){
     character.fight(map[character.location].monsters[0]);
