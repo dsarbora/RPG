@@ -1,4 +1,4 @@
-#gameWrapper{
+.wrapper{
   display: none;
 }
 #locationDisplayBox{
@@ -12,6 +12,14 @@
 #statsDisplay{
   line-height: 15px;
 
+}
+#deathScreen{
+  display: none;
+  background-color: black;
+  color: white;
+  height: 600px;
+  padding-top: 240px;
+  text-align: center;
 }
 
 #buttonDisplayBox{
