@@ -24,13 +24,15 @@ Monster.prototype.checkDead = function(){
   }
 }
 
-var caveRat = new Monster("cave rat", 17, 4);
-var troll = new Monster("troll", 83, 15);
-var ogre = new Monster("ogre", 64, 18);
-var skeleton = new Monster("skeleton", 35, 9);
-var ogreLord = new Monster("ogre lord", 109, 28);
+var caveRat = new Monster("Cave rat", 17, 4);
+var troll = new Monster("Troll", 83, 15);
+var ogre = new Monster("Ogre", 64, 18);
+var skeleton = new Monster("Skeleton", 35, 9);
+var ogreLord = new Monster("Ogre lord", 109, 17);
+var dragon = new Monster("Dragon", 200, 25)
 game.getMonster(caveRat);
 game.getMonster(troll);
 game.getMonster(ogre);
 game.getMonster(skeleton);
 game.getMonster(ogreLord);
+game.getMonster(dragon);

@@ -64,40 +64,12 @@ MapLocation.prototype.displayExtras = function(){
 
 
 MapLocation.prototype.spawnMonster = function(number){
-  if (number == 0){
-    this.monsters.push(game.monsters[0])
-  }
-  else if (number == 1){
-    this.monsters.push(game.monsters[1]);
-  }
-  else if (number == 2){
-    this.monsters.push(game.monsters[2]);
-  }
-  else if (number == 3){
-    this.monsters.push(game.monsters[3]);
-  }
-  else if (number == 4){
-    this.monsters.push(game.monsters[4]);
-  };
+  this.monsters.push(game.monsters[number])
   this.displayExtras();
 };
 
 MapLocation.prototype.spawnItem = function(number){
-  if (number == 0){
-    this.items.push(game.items[0])
-  }
-  else if (number == 1){
-    this.items.push(game.items[1]);
-  }
-  else if (number == 2){
-    this.items.push(game.items[2]);
-  }
-  else if (number == 3){
-    this.items.push(game.items[3]);
-  }
-  else if (number == 4){
-    this.items.push(game.items[4]);
-  };
+  this.items.push(game.items[number])
   this.displayExtras();
 };
 

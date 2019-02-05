@@ -20,6 +20,7 @@ $("#nameForm").submit(function(){
   map[9].spawnMonster(3);
   map[8].spawnMonster(0);
   map[7].spawnMonster(4);
+  map[11].spawnMonster(5)
   map[4].spawnItem(0);
 
   map[character.location].getExits();
