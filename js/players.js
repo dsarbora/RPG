@@ -1,7 +1,8 @@
 //              PLAYER CHARACTER CONSTRUCTOR AND METHODS
-function Character(name, hitPoints, strength, dexterity, intelligence, courage, swordsmanship, tactics, hiding, weapon, inventory, location, previousLocations){
+function Character(name, hp, damage, strength, dexterity, intelligence, courage, swordsmanship, tactics, hiding, weapon, inventory, location, previousLocations){
   this.name = name,
-  this.hitPoints = hitPoints,
+  this.hp = hp,
+  this.damage = damage,
   this.strength = strength,
   this.dexterity = dexterity,
   this.intelligence = intelligence,
@@ -15,22 +16,42 @@ function Character(name, hitPoints, strength, dexterity, intelligence, courage, 
   this.previousLocations = previousLocations
 };
 
-Character.prototype.fight = function(){     //
-  var hitChance = this.swordsmanship;
-  var critChance = this.tactics;
+Character.prototype.hit = function(target){
+  target.takeDamage(this.damage);
+  game.gameMap[this.location].displayExtras();
 };
 
+Character.prototype.fight = function(monster){
+  this.hit(monster);
+  console.log("You hit the monster for " + this.damage + " leaving him with " + monster.hp + " hp");
+
+  if(!monster.checkDead()){
+    monster.hit(this);
+    console.log("The monster swings for " + monster.damage + ". You have " + this.hp + "hp.");
+    this.checkDead();
+  }
+};
+
+
+Character.prototype.checkDead = function(){
+  if(this.hp < 1){
+    console.log("You are dead.");
+  }
+};
+
+
+
 Character.prototype.takeDamage = function(damage){ //  PLAYER TAKE DAMAGE FUNCTION
-  this.hitPoints -= damage;
+  this.hp -= damage;
   this.displayAll();
 };
 
 Character.prototype.heal = function(healing){   //  PLAYER HEALING FUNCTION
-  if(this.hitPoints + healing > 100){
-    this.hitPoints = 100;
+  if(this.hp + healing > 100){
+    this.hp = 100;
   }
   else{
-    this.hitPoints += healing;
+    this.hp += healing;
   }
   this.displayAll();
 };
@@ -66,7 +87,7 @@ Character.prototype.disarmWeapon = function(){       //  DISARMS WEAPON, PUSHES 
 
 Character.prototype.displayAll = function(){
   $("#showName").text(this.name)
-  $("#showHitPoints").text(this.hitPoints)
+  $("#showHitPoints").text(this.hp)
   $("#showStrength").text(this.strength)
   $("#showDexterity").text(this.dexterity)
   $("#showIntelligence").text(this.intelligence)
@@ -78,17 +99,17 @@ Character.prototype.displayAll = function(){
   $("#missingHP").text('');
   this.displayWeapon()
   for(var i = 0; i<100; i++){
-    if(this.hitPoints > i){
+    if(this.hp > i){
       $("#HP").append("|");
     }
     else{
       $("#missingHP").append("|");
     };
     $("#HP").removeClass();
-    if(this.hitPoints > 50){
+    if(this.hp > 50){
       $("#HP").addClass("green");
     }
-    else if(this.hitPoints > 30){
+    else if(this.hp > 30){
       $("#HP").addClass("yellow");
     }
     else{
@@ -103,6 +124,7 @@ Character.prototype.askName = function(){
 }
 
 Character.prototype.move = function(input){   //       !!! NEEDS A BUTTON ON THE PAGE TO GIVE AN ID FOR FORWARD, NO ID NEEDED FOR BACK- STATEMENT WILL READ IF(ID)
+  $("button").hide();
   if(input == "forward"){
   this.location ++
 
@@ -111,7 +133,13 @@ Character.prototype.move = function(input){   //       !!! NEEDS A BUTTON ON THE
     this.location --
 
   };
-  $("#location").text(game.gameMap[game.characters[0].location].description);
-  game.gameMap[game.characters[0].location].displayExtras();
-  game.characters[0].heal(5);
+
+  $("#location").text(game.gameMap[this.location].description);
+  game.gameMap[this.location].displayExtras();
+  this.heal(5);
+  game.gameMap[this.location].getExits();
 };
+
+
+
+game.getPlayer()

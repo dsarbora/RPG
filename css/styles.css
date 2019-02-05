@@ -1,3 +1,6 @@
+#gameWrapper{
+  display: none;
+}
 #locationDisplayBox{
   float: right;
 }
@@ -20,6 +23,8 @@
 #fightDisplay{
 }
 #buttons{
+  position: absolute;
+  bottom: 25px;
 }
 #name{
   text-align: center;

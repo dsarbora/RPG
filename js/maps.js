@@ -27,30 +27,39 @@ var mountainInterior2 = new MapLocation("Lair of the Dragon" , "Bones are strewn
 var mountainTop = new MapLocation("Top of the mountain", "You look down on the clouds from the top of the mountain and feel strangely invigorated.", 12);
 
 
-city1.addMapLocation();
-city2.addMapLocation();
-forest1.addMapLocation();
-forest2.addMapLocation();
-forest3.addMapLocation();
-riverCrossing.addMapLocation();
-footHills1.addMapLocation();
-footHills2.addMapLocation();
-mountainBase.addMapLocation();
-mountainInterior1.addMapLocation();
-mountainLedge.addMapLocation();
-mountainInterior2.addMapLocation();
-mountainTop.addMapLocation();
+game.getMap(city1);
+game.getMap(city2);
+game.getMap(forest1);
+game.getMap(forest2);
+game.getMap(forest3);
+game.getMap(riverCrossing);
+game.getMap(footHills1);
+game.getMap(footHills2);
+game.getMap(mountainBase);
+game.getMap(mountainInterior1);
+game.getMap(mountainLedge);
+game.getMap(mountainInterior2);
+game.getMap(mountainTop);
 
 MapLocation.prototype.displayExtras = function(){
   $("#fightLog").text('');
   $("#additionalMapFeatures").text('');
+  if(this.monsters[0] && this.monsters[0].hp > 0){
+    $("#fightButton").show();
+  }
+  else{
+    $("#fightButton").hide();
+  }
   for (var i = 0; i<this.monsters.length; i++){
-  $("#fightLog").append(this.monsters[i].name +  ": " + this.monsters[i].hitPoints + "HP" + "<br>");
-  $("#additionalMapFeatures").append("A " + this.monsters[i].name + " lurks around you. <br>")
+    if(!this.monsters[i].checkDead()){
+      $("#fightLog").append(this.monsters[i].name +  ": " + this.monsters[i].hp + "HP" + "<br>");
+      $("#additionalMapFeatures").append("A " + this.monsters[i].name + " lurks around you. <br>")
+    }
+    else{
+      $("#fightLog").append(this.monsters[i].name +  ": corpse"  + "<br>");
+      $("#additionalMapFeatures").append("A " + this.monsters[i].name + " is dead. <br>")
+    };
   };
-
-
-
 };
 
 
@@ -71,4 +80,30 @@ MapLocation.prototype.spawnMonster = function(number){
     this.monsters.push(game.monsters[4]);
   };
   this.displayExtras();
+};
+
+MapLocation.prototype.getExits = function(){
+  if(this.location === 11 || this.location === 12){
+    $("#climbDownButton").show();
+  }
+  else if(this.location === 0){
+    $("#forwardButton").show();
+  }
+  else if(this.location === 9){
+    $("#backButton").show();
+    $("#climbUpButton").show();
+  }
+  else if(this.location === 8){
+    $("#forwardButton").show();
+    $("#backButton").show();
+    $("#climbUpButton").show();
+  }
+  else if(this.location === 10){
+    $("#climbUpButton").show();
+    $("#climbDownButton").show();
+  }
+  else{
+    $("#forwardButton").show();
+    $("#backButton").show();
+  };
 };

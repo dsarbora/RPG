@@ -1,19 +1,23 @@
 
 
-function Game(characters, gameMap, monsters){
+function Game(characters, monsters, gameMap){
   this.characters = [],
-  this.gameMap = [],
-  this.monsters = []
+  this.monsters = [],
+  this.gameMap = []
 }
 
-Game.prototype.createWarrior = function(){
-  var warrior = new Character("You", 60, 60, 35, 15, 50, 50, 50, 10);
+Game.prototype.getPlayer = function(){
+  var warrior = new Character("You", 60, 25, 60, 35, 15, 50, 50, 50, 10);
   this.characters.push(warrior);
+};
 
-}
+Game.prototype.getMonster = function(monster){
+  this.monsters.push(monster);
+};
 
-Game.prototype.addMonster = function(monster){
-  this.monsters.push(monster)
-}
+Game.prototype.getMap = function(mapLocation){
+  this.gameMap.push(mapLocation);
+};
 
+//========================================================
 var game = new Game();
