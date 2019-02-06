@@ -15,16 +15,17 @@ function Armor(name, rating, dexPenalty){
   this.dexPenalty = dexPenalty
 }
 //             HEALING ITEM CONSTRUCTOR AND METHODS
-function Item(name, type, number, healing){
+function Item(name, type, damage, healing){
   this.name = name,
-  this.number = number,
+  this.type = type,
+  this.damage = damage,
   this.healing = healing
 }
 
 
 Item.prototype.displayItem = function(){
   if(this){
-    $("#items").text(this.name);
+    $("#items").text("A " + this.name.toLowerCase() + itemActions[Math.floor(Math.random()*itemActions.length)]);
     $("#getButton").show();
   }
   else{
