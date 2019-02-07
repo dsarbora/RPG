@@ -95,8 +95,19 @@ Character.prototype.disarmWeapon = function(){      //  DISARMS WEAPON, PUSHES T
 };
 
 Character.prototype.giveItem = function(npc){
-  this.inventory.shift()
-  npc.giveItem();
+  if(this.findQuestItem()){
+    this.inventory.splice(this.inventory.indexOf(this.findQuestItem()), 1)
+    npc.giveItem();
+  }
+};
+
+Character.prototype.findQuestItem = function(){
+  for(var i = 0; i < this.inventory.length; i++){
+    if(this.inventory[i].questItem){
+      return this.inventory[i];
+    };
+  };
+  return false;
 };
 
 Character.prototype.displayAll = function(){
@@ -164,7 +175,6 @@ Character.prototype.get = function(){
 Character.prototype.displayArmButton = function(){
   $("#armButton").show();
 }
-
 
 
 Character.prototype.addBonusDamage = function(item){
