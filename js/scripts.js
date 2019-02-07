@@ -51,7 +51,6 @@ $("#nameForm").submit(function(){
 
   $("#getButton").click(function(){
     character.get();
-    $("#items").text('')
     $("#getButton").hide();
   });
 

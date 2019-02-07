@@ -28,6 +28,7 @@ Item.prototype.displayItem = function(){
   if(this){
     $("#items").text("A " + this.name.toLowerCase() + itemActions[Math.floor(Math.random()*itemActions.length)]);
     $("#getButton").show();
+    $("#getItemName").text(this.name)
   }
   else{
     $("#items").text('');

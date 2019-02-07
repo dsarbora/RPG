@@ -149,8 +149,9 @@ Character.prototype.move = function(input){   //       !!! NEEDS A BUTTON ON THE
   this.heal(3);
   game.displayAll();  //  game.js line 36
 };
-Character.prototype.displayGetButton = function(){
+Character.prototype.displayGetButton = function(){  //  CREATED AS A WORKAROUND FOR MONSTER.DROPLOOT - DISPLAY ALL WAS CALLING CHECKDEAD WHICH WAS BEING USED AT THE TIME IN DROPLOOT - MAY BE REPLACEABLE NOW
   $("#getButton").show();
+  $("#getItemName").text(game.characterLocation().items[0].name);
   $("#items").text(game.characterLocation().items[0].name);
 };
 
