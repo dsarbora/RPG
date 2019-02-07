@@ -43,7 +43,7 @@ Game.prototype.displayAll = function(){
   this.clearDisplays();
   this.characters[0].displayAll();
   $("#location").text(this.characterLocation().description);
-  this.characterLocation().getExits();
+
   this.characterLocation().items.forEach(function(item){
     item.displayItem();
   });
@@ -53,6 +53,21 @@ Game.prototype.displayAll = function(){
   this.characterLocation().friendlies.forEach(function(friendly){
     friendly.displayNPC();
   });
+  if(!this.characters[0].inCombat){
+    this.characterLocation().getExits();
+  }
+  if(this.characters[0].inventory[0]){
+    $("#armButton").show();
+  };
+  if(this.characters[0].weapon[1]){
+    $("#disarmButton").show();
+  };
+  if(this.characterLocation().location == 2){
+    $("#talkButton").show();
+  }
+  if(this.characters[0].weapon[1]){
+    $("#disarmButton").show();
+  }
 }
 
 //========================================================

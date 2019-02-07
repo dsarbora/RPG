@@ -16,13 +16,25 @@ Monster.prototype.takeDamage = function(damage){
 Monster.prototype.checkDead = function(){
   if(this.hp < 1){
     console.log("The monster is dead.");
-    $("#fight").hide();
+    $("#fightButton").hide();
+    game.characters[0].inCombat = false;
+    //game.characterLocation().getExits();
     return true;
   }
   else{
     return false;
   }
 }
+
+Monster.prototype.dropLoot = function(){
+  if(game.characterLocation().location == 4){
+    if(character.quest == true){
+      game.characterLocation().spawnItem(2)
+      game.characters[0].displayGetButton();
+
+    }
+  }
+};
 
 Monster.prototype.displayMonster = function(){
   if(this && !this.checkDead()){
@@ -33,6 +45,7 @@ Monster.prototype.displayMonster = function(){
   else if(this && this.checkDead()){
     $("#fightLog").append(this.name +  ": corpse"  + "<br><br>");
     $("#monsters").append("A " + this.name.toLowerCase() + " is dead. <br><br>")
+
   }
   else{
     $("#fightButton").hide();
@@ -52,11 +65,11 @@ game.getMonster(skeleton);
 game.getMonster(ogreLord);
 game.getMonster(dragon);
 
-function NPC(name, hp, damage, items, location, friendly){
+function NPC(name, hp, damage, inventory, location, friendly){
   this.name = name,
   this.hp = hp,
   this.damage = damage,
-  this.items = [],
+  this.inventory = [],
   this.location = location,
   this.friendly = true
 };
@@ -96,6 +109,19 @@ NPC.prototype.displayNPC = function(){
   };
 };
 
+NPC.prototype.giveItem = function(){
+  game.characters[0].inventory.unshift(this.inventory[0])
+  this.inventory.shift()
+  game.characters[0].quest = "complete";
+  game.displayAll();
+}
 
-var npc = new NPC("Georgia", 100, 5, "Sword", 3);
+NPC.prototype.talk = function(output){
+  console.log(output);
+}
+
+
+var npc = new NPC("Georgia", 100, 5);
+npc.inventory.push(sword);
+npc.location = 3;
 game.getFriendly(npc);
