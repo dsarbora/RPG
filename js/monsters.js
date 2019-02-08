@@ -13,12 +13,11 @@ Monster.prototype.hit = function(target){
 Monster.prototype.takeDamage = function(damage){
   this.hp -= damage;
 }
-Monster.prototype.checkDead = function(){
+Monster.prototype.isDead = function(){
   if(this.hp < 1){
     console.log("The monster is dead.");
     $("#fightButton").hide();
-    game.characters[0].inCombat = false;
-    //game.characterLocation().getExits();
+    game.players[0].inCombat = false;
     return true;
   }
   else{
@@ -27,52 +26,88 @@ Monster.prototype.checkDead = function(){
 }
 
 Monster.prototype.dropLoot = function(){
-  if(game.characterLocation().location == 4){
-    if(character.quest == true){
-      game.characterLocation().spawnItem(2);
-      game.characters[0].displayGetButton();
-
+  if(game.playerLocation().location == 4){
+    if(player.quest == true){
+      game.playerLocation().spawnItem(2);
     }
     else{
-      game.characterLocation().spawnItem(3);
-      game.characters[0].displayGetButton()
+      game.playerLocation().spawnItem(3);
     }
   }
+  else if(game.playerLocation().monsters[0].name == "Ogre"){
+    $("#talkButton").show();
+  }
+  game.displayAll();
 };
 
 Monster.prototype.displayMonster = function(){
-  if(this && !this.checkDead()){
+  if(this && !this.isDead()){
       $("#fightButton").show();
       $("#fightLog").append(this.name +  ": " + this.hp + "HP" + "<br><br>");
       $("#monsters").append(monsterDescriptions[Math.floor(Math.random()*monsterDescriptions.length)] + this.name.toLowerCase() + monsterActions[Math.floor(Math.random()*monsterActions.length)]+ "<br><br>")
   }
-  else if(this && this.checkDead()){
+  else if(this && this.isDead()){
     $("#fightLog").append(this.name +  ": corpse"  + "<br><br>");
     $("#monsters").append("A " + this.name.toLowerCase() + " is dead. <br><br>")
 
   }
+  //game.displayAll();
+};
+
+Monster.prototype.displayMonsterArt = function(){
+  if(this && !this.isDead()){
+    if(this.name == "Goblin"){
+      $("#goblin").show()
+    }
+    else if(this.name == "Ogre"){
+      $("#ogre").show()
+    }
+    else if(this.name == "Skeleton"){
+      $("#skeleton").show()
+    }
+    else if(this.name == "Golem"){
+      $("#golem").show()
+    }
+    else if(this.name == "Dragon"){
+      $("#dragon").show()
+    }
+  }
   else{
-    $("#fightButton").hide();
+    if(this.name == "Goblin"){
+      $("#deadGoblin").show()
+    }
+    else if(this.name == "Ogre"){
+      $("#deadOgre").show()
+    }
+    else if(this.name == "Skeleton"){
+      $("#deadSkeleton").show()
+    }
+    else if(this.name == "Golem"){
+      $("#deadGolem").show()
+    }
+    else if(this.name == "Dragon"){
+      $("#deadDragon").show()
+    };
   };
 };
 
-var caveRat = new Monster("Cave rat", 17, 4);
-var troll = new Monster("Troll", 83, 15);
-var ogre = new Monster("Ogre", 64, 18);
+var goblin = new Monster("Goblin", 64, 18);
+var ogre = new Monster("Ogre", 83, 15);
 var skeleton = new Monster("Skeleton", 35, 9);
-var ogreLord = new Monster("Ogre lord", 109, 17);
-var dragon = new Monster("Dragon", 200, 25)
-game.getMonster(caveRat);
-game.getMonster(troll);
+var golem = new Monster("Golem", 109, 17);
+var dragon = new Monster("Dragon", 200, 40)
+game.getMonster(goblin);
 game.getMonster(ogre);
 game.getMonster(skeleton);
-game.getMonster(ogreLord);
+game.getMonster(golem);
 game.getMonster(dragon);
 
-function NPC(name, hp, damage, inventory, location, friendly){
+function NPC(name, hp, damage, description, action, inventory, location,){
   this.name = name,
   this.hp = hp,
   this.damage = damage,
+  this.description = description,
+  this.action = action,
   this.inventory = [],
   this.location = location,
   this.friendly = true
@@ -89,7 +124,7 @@ NPC.prototype.hit = function(target){
   target.takeDamage(this.damage);
 };
 
-NPC.prototype.checkDead = function(){
+NPC.prototype.isDead = function(){
   if(this.hp < 1){
     return true;
   }
@@ -99,33 +134,35 @@ NPC.prototype.checkDead = function(){
 };
 
 NPC.prototype.displayNPC = function(){
-  if(this && !this.checkDead()){
+  if(this && !this.isDead()){
       //$("#fightButton").show();
-      $("#fightLog").append(this.name);
-      $("#monsters").append("A friendly woman named " + this.name.toLowerCase() + " introduces herself."+ "<br><br>")
+      //$("#fightLog").append(this.name);
+      $("#monsters").append(this.description + this.name.toLowerCase() + this.action+ "<br><br>")
   }
-  else if(this && this.checkDead()){
+  else if(this && this.isDead()){
     $("#fightLog").append(this.name +  ": corpse"  + "<br><br>");
     $("#monsters").append("A " + this.name.toLowerCase() + " is dead. <br><br>")
   }
-  else{
-    $("#fightButton").hide();
-  };
 };
 
 NPC.prototype.giveItem = function(){
-  game.characters[0].inventory.unshift(this.inventory[0])
+  game.players[0].inventory.unshift(this.inventory[0])
   this.inventory.shift()
-  game.characters[0].quest = "complete";
+  game.players[0].quest = "complete";
   game.displayAll();
 }
 
 NPC.prototype.talk = function(output){
-  console.log(output);
+  $("#monsters").text(this.name + ": " +output);
 }
 
 
-var npc = new NPC("Georgia", 100, 5);
+var npc = new NPC("Crone", 100, 5, "A haggard old ", " waves you to come over.");
+var wizard = new NPC("Wizard", 100, 5, "What appears to be a ", " greets you at the mountain top.");
+var captive = new NPC("Captive", 100, 5, "A ", " lies tied up behind the ogre.");
 npc.inventory.push(sword);
 npc.location = 3;
+wizard.location = 12;
 game.getFriendly(npc);
+game.getFriendly(wizard);
+game.getFriendly(captive);

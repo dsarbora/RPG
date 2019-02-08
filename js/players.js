@@ -1,5 +1,5 @@
 //              PLAYER CHARACTER CONSTRUCTOR AND METHODS
-function Character(name, hp, damage, strength, dexterity, intelligence, courage, swordsmanship, tactics, hiding, weapon, inventory, inCombat, quest, location, previousLocations){
+function Player(name, hp, damage, strength, dexterity, intelligence, courage, swordsmanship, tactics, hiding, weapon, inventory, inCombat, quest, isFortified, takeDamageMultiplier, location, previousLocations){
   this.name = name,
   this.hp = hp,
   this.damage = damage,
@@ -13,33 +13,36 @@ function Character(name, hp, damage, strength, dexterity, intelligence, courage,
   this.weapon = [bareHands],
   this.inventory = [],
   this.inCombat = !!inCombat,
-  this.quest = !!inCombat,
+  this.quest = !!quest,
+  this.isFortified = !!isFortified,
+  this.takeDamageMultiplier = 1;
   this.location = 0,
   this.previousLocations = []
 };
 
-Character.prototype.hit = function(target){
+Player.prototype.hit = function(target){
   target.takeDamage(this.damage);
   game.displayAll()
 };
 
-Character.prototype.fight = function(monster){
+Player.prototype.fight = function(monster){
   this.inCombat = true;
   this.hit(monster);
   console.log("You hit the monster for " + this.damage + " leaving him with " + monster.hp + " hp");
-  if(!monster.checkDead()){
+  if(!monster.isDead()){
     monster.hit(this);
     console.log("The monster swings for " + monster.damage + ". You have " + this.hp + "hp.");
-    this.checkDead();
+    this.isDead();
   }
   else{
     monster.dropLoot();
+    game.displayWinScreen();
   }
 
 };
 
 
-Character.prototype.checkDead = function(){
+Player.prototype.isDead = function(){
   if(this.hp < 1){
     console.log("You are dead.");
     $("#gameScreen").hide();
@@ -47,12 +50,12 @@ Character.prototype.checkDead = function(){
   }
 };
 
-Character.prototype.takeDamage = function(damage){ //  PLAYER TAKE DAMAGE FUNCTION
-  this.hp -= damage;
+Player.prototype.takeDamage = function(damage){ //  PLAYER TAKE DAMAGE FUNCTION
+  this.hp -= (damage * this.takeDamageMultiplier);
   this.displayAll();
 };
 
-Character.prototype.heal = function(healing){   //  PLAYER HEALING FUNCTION
+Player.prototype.heal = function(healing){   //  PLAYER HEALING FUNCTION
   if(this.hp + healing > 100){
     this.hp = 100;
   }
@@ -62,16 +65,16 @@ Character.prototype.heal = function(healing){   //  PLAYER HEALING FUNCTION
   game.displayAll();
 };
 
-Character.prototype.flee = function(){     //
+Player.prototype.flee = function(){     //
   this.takeDamage(5);
   this.move();
 };
 
-Character.prototype.displayWeapon = function(){  // DISPLAYS ARMED WEAPON IN HTML
+Player.prototype.displayWeapon = function(){  // DISPLAYS ARMED WEAPON IN HTML
   $("#displayWeapon").text(this.weapon[0].name)
 }
 
-Character.prototype.armWeapon = function(weapon){    //  ARM WEAPON, ONE WEAPON AT A TIME
+Player.prototype.armWeapon = function(weapon){    //  ARM WEAPON, ONE WEAPON AT A TIME
   if(this.weapon[0] == bareHands){
     this.weapon.unshift(weapon);
     this.inventory.shift();
@@ -80,28 +83,29 @@ Character.prototype.armWeapon = function(weapon){    //  ARM WEAPON, ONE WEAPON 
   else{
     this.changeWeapon(weapon)
   }
-  this.displayWeapon();
-}
-Character.prototype.changeWeapon = function(weapon){   //  CHANGE WEAPON, GETS CALLED IF WEAPON [] ALREADY HAS AN ITEM - PUSHES CURRENT WEAPON TO INVENTORY
+  game.displayAll();
+};
+
+Player.prototype.changeWeapon = function(weapon){   //  CHANGE WEAPON, GETS CALLED IF WEAPON [] ALREADY HAS AN ITEM - PUSHES CURRENT WEAPON TO INVENTORY
   this.disarmWeapon();
   this.armWeapon(weapon);
 };
 
-Character.prototype.disarmWeapon = function(){      //  DISARMS WEAPON, PUSHES TO INVENTORY
+Player.prototype.disarmWeapon = function(){      //  DISARMS WEAPON, PUSHES TO INVENTORY
   this.loseBonusDamage(this.weapon[0]);
   this.inventory.push(this.weapon[0])
   this.weapon.shift();
-  this.displayWeapon();
+  game.displayAll();
 };
 
-Character.prototype.giveItem = function(npc){
+Player.prototype.giveItem = function(npc){
   if(this.findQuestItem()){
     this.inventory.splice(this.inventory.indexOf(this.findQuestItem()), 1)
     npc.giveItem();
   }
 };
 
-Character.prototype.findQuestItem = function(){
+Player.prototype.findQuestItem = function(){
   for(var i = 0; i < this.inventory.length; i++){
     if(this.inventory[i].questItem){
       return this.inventory[i];
@@ -110,7 +114,7 @@ Character.prototype.findQuestItem = function(){
   return false;
 };
 
-Character.prototype.displayAll = function(){
+Player.prototype.displayAll = function(){
   $("#showName").text(this.name)
   $("#showHitPoints").text(this.hp)
   $("#showStrength").text(this.strength)
@@ -120,6 +124,9 @@ Character.prototype.displayAll = function(){
   $("#showTactics").text(this.tactics)
   $("#showHiding").text(this.hiding)
   $("#showLocationName").text(game.gameMap[this.location].name)
+};
+
+Player.prototype.displayHealthBar = function(){
   $("#HP").text('');
   $("#missingHP").text('');
   this.displayWeapon()
@@ -141,16 +148,10 @@ Character.prototype.displayAll = function(){
       $("#HP").addClass("red");
     };
   };
-
 };
 
-Character.prototype.askName = function(input){
-  this.name = input;
-}
-
-Character.prototype.move = function(input){   //       !!! NEEDS A BUTTON ON THE PAGE TO GIVE AN ID FOR FORWARD, NO ID NEEDED FOR BACK- STATEMENT WILL READ IF(ID)
+Player.prototype.move = function(input){
   this.previousLocations.push(this.location);
-  $("button").hide();
   if(input == "forward"){
   this.location ++
   }
@@ -160,42 +161,56 @@ Character.prototype.move = function(input){   //       !!! NEEDS A BUTTON ON THE
   this.heal(3);
   game.displayAll();  //  game.js line 36
 };
-Character.prototype.displayGetButton = function(){  //  CREATED AS A WORKAROUND FOR MONSTER.DROPLOOT - DISPLAY ALL WAS CALLING CHECKDEAD WHICH WAS BEING USED AT THE TIME IN DROPLOOT - MAY BE REPLACEABLE NOW
-  $("#getButton").show();
-  $("#getItemName").text(game.characterLocation().items[0].name);
-  $("#items").text(game.characterLocation().items[0].name);
-};
 
-Character.prototype.get = function(){
-  character.inventory.push(map[character.location].items[0]);
-  map[character.location].items.shift();
+Player.prototype.get = function(){
+  player.inventory.push(map[player.location].items[0]);
+  map[player.location].items.shift();
   game.displayAll();
 };
 
-Character.prototype.displayArmButton = function(){
-  $("#armButton").show();
-}
-
-
-Character.prototype.addBonusDamage = function(item){
+Player.prototype.addBonusDamage = function(item){
   this.damage += item.damage;
 };
 
-Character.prototype.loseBonusDamage = function(item){
+Player.prototype.loseBonusDamage = function(item){
   this.damage -= item.damage;
 };
 
-Character.prototype.useItem = function(item){
+Player.prototype.useItem = function(item){
   this.heal(item.damage);
+  this.inventory.splice(this.inventory.indexOf(item), 1);
+  game.displayAll();
 };
 
-Character.prototype.findConsumable = function(){
+Player.prototype.findConsumable = function(){
   for(var i = 0; i < this.inventory.length; i++){
     if(this.inventory[i].consumable){
       return this.inventory[i];
     };
   };
 };
+
+Player.prototype.rest = function(){
+  this.hp = 100;
+  $("#location").text("You feel well rested and healthy again.")
+  game.displayAll();
+};
+
+Player.prototype.look = function(){
+  game.displayAll();
+  if(game.playerLocation().location == 10){
+    $("#forwardButton").show();
+    $("#location").append("<br>You move some bushes and see a hidden entrance leading into a cave.");
+  };
+};
+
+Player.prototype.getFortified = function(){
+  this.hp = 100;
+  if(!this.isFortified){
+    this.takeDamageMultiplier = .5;
+  }
+  game.displayAll();
+}
 
 
 game.getPlayer();
