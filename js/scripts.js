@@ -86,10 +86,7 @@ $("#fightButton").click(function(){
 });
 
 $("#userInputForm").submit(function(){
-  event.preventDefault();
-  var userInput = $("#userInput").val();
-  $("#userInput").val('')
-  alert(userInput);
+  game.getUserInput();
 });
 
 $("#talkButton").click(function(){
@@ -150,25 +147,11 @@ $("#talkButton").click(function(){
 });
 
 $("#yesButton").click(function(){
-  if(player.location == 2){
-    player.quest = true;
-    $("#yesButton").hide();
-    $("#noButton").hide();
-    npc.talk("Thank you! I knew someone would come along that I could count on!");
-  }
-  else if(player.location == 6){
-    $("#location").text("You reach down and untie the captive.");
-    captive.talk("Thank you!! If you're going to go any further, you'll want to pay my friend a visit at the top of the mountain.");
-  }
+  player.sayYes();
 });
 
 $("#noButton").click(function(){
-  if(player.location == 2){
-    npc.talk("Some help you are. Take some time to think about it... will you change your mind?");
-  }
-  else if(player.location == 6){
-    captive.talk("I never knew someone to be so unhelpful. Please change your mind?")
-  }
+  player.sayNo();
 });
 
 $("#restButton").click(function(){

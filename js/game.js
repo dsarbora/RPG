@@ -108,5 +108,12 @@ Game.prototype.displayWinScreen = function(){
   }
 }
 
+Game.prototype.getUserInput = function(){
+  event.preventDefault();
+  var userInput = $("#userInput").val();
+  $("#userInput").val('')
+  alert(userInput);
+}
+
 //========================================================
 var game = new Game();

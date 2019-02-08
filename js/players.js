@@ -212,5 +212,36 @@ Player.prototype.getFortified = function(){
   game.displayAll();
 }
 
+Player.prototype.sayYes = function (){
+  if(this.location == 2){
+    this.quest = true;
+    $("#yesButton").hide();
+    $("#noButton").hide();
+    npc.talk("Thank you! I knew someone would come along that I could count on!");
+  }
+  else if(player.location == 6){
+    $("#location").text("You reach down and untie the captive.");
+    captive.talk("Thank you!! If you're going to go any further, you'll want to pay my friend a visit at the top of the mountain.");
+  };
+};
+
+Player.prototype.sayNo = function(){
+  if(this.location == 2){
+    npc.talk("Some help you are. Take some time to think about it... will you change your mind?");
+  }
+  else if(this.location == 6){
+    captive.talk("I never knew someone to be so unhelpful. Please change your mind?")
+  };
+};
+
+Player.prototype.climbUp = function(){
+  if(!map[player.location].monsters[0] || game.gameMap[this.location].monsters[0].isDead()){
+    player.move("forward");
+    player.move("forward");
+  }
+  else{
+    $("#location").text("The " + game.gameMap.monsters[0].name.toLowerCase() + " blocks your way.")
+  };
+}
 
 game.getPlayer();
