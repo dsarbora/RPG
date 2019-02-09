@@ -34,26 +34,21 @@ var itemActions = [
   " lies nearby."
 ];
 
-// Location Descriptions, Main and Array
-var forestMainDesc = "";
+var monsterBaseHP = [
+  ["goblin", 65],
+  ["ogre", 85],
+  ["skeleton", 35],
+  ["golem", 100],
+  ["dragon", 200]
+];
 
-var forestDescriptions = "";
-
-var townMainDesc = "";
-
-var townDescriptions = "";
-
-var caveMainDesc = "";
-
-var caveDescriptions = "";
-
-var mountainsideMainDesc = "";
-
-var mountainsideDescriptions = "";
-
-var springsMainDesc = "";
-
-var springsDescriptions = "";
+var monsterBonusHP = [
+  ["goblin", 12],
+  ["ogre", 20],
+  ["skeleton", 10],
+  ["golem", 30],
+  ["dragon", 50]
+];
 
 // // Descriptive Items
 // var bareHandsDesc = "There are tales of great warriors who take down beasts with only their hands, with the strength to tear skull from spine and put an end to the plaguing horrors. Your hands don’t do that, you hit things and it hurts when you do."

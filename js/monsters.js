@@ -1,12 +1,22 @@
 //              MONSTER CONSTRUCTOR AND METHODS
 
-function Monster(name, hp, damage, description, action, location){
+function Monster(name, damage, hp, description, action, location){
   this.name = name,
-  this.hp = hp,
   this.damage = damage,
+  this.hp = hp,
   this.description = monsterDescriptions[Math.floor(Math.random()*monsterDescriptions.length)]
   this.action = monsterActions[Math.floor(Math.random()*monsterActions.length)]
   this.location = location
+};
+
+Monster.prototype.getHP = function(){
+  for(var i = 0; i < monsterBaseHP.length; i++){
+    if(this.name == monsterBaseHP[i][0]){
+      this.hp = monsterBaseHP[i][1];
+      this.hp += Math.floor(Math.random()*monsterBonusHP[i][1]);
+      break;
+    };
+  };
 };
 
 Monster.prototype.hit = function(target){
@@ -93,11 +103,11 @@ Monster.prototype.displayMonsterArt = function(){
   };
 };
 
-var goblin = new Monster("Goblin", 64, 18);
-var ogre = new Monster("Ogre", 83, 15);
-var skeleton = new Monster("Skeleton", 35, 9);
-var golem = new Monster("Golem", 109, 17);
-var dragon = new Monster("Dragon", 200, 40)
+var goblin = new Monster("goblin", 18);
+var ogre = new Monster("ogre", 15);
+var skeleton = new Monster("skeleton", 9);
+var golem = new Monster("golem", 17);
+var dragon = new Monster("dragon", 40)
 game.getMonster(goblin);
 game.getMonster(ogre);
 game.getMonster(skeleton);

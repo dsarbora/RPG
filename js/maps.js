@@ -46,6 +46,7 @@ game.getMap(mountainTop);
 
 MapLocation.prototype.spawnMonster = function(number){
   this.monsters.push(game.monsters[number])
+  game.monsters[number].getHP();
 };
 
 MapLocation.prototype.spawnItem = function(number){
