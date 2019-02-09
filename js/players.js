@@ -20,26 +20,73 @@ function Player(name, hp, damage, strength, dexterity, intelligence, courage, sw
   this.previousLocations = []
 };
 
+Player.prototype.getName = function(){
+  event.preventDefault();
+  var name = $("#userName").val();
+  player.name = (name);
+  $("#preGameScreen").hide();
+  $("#gameScreen").fadeIn();
+  game.displayAll();
+}
+
 Player.prototype.hit = function(target){
   target.takeDamage(this.damage);
-  game.displayAll()
 };
 
-Player.prototype.fight = function(monster){
+Player.prototype.FIGHT = function(opponent){
   this.inCombat = true;
-  this.hit(monster);
-  console.log("You hit the monster for " + this.damage + " leaving him with " + monster.hp + " hp");
-  if(!monster.isDead()){
-    monster.hit(this);
-    console.log("The monster swings for " + monster.damage + ". You have " + this.hp + "hp.");
+  this.hit(opponent);
+  console.log("You hit the monster for " + this.damage + " leaving him with " + opponent.hp + " hp");
+  if(!opponent.isDead()){
+    opponent.hit(this);
+    console.log("The monster swings for " + opponent.damage + ". You have " + this.hp + "hp.");
     this.isDead();
   }
   else{
-    monster.dropLoot();
+    opponent.dropLoot();
     game.displayWinScreen();
   }
-
+game.displayAll()
 };
+
+Player.prototype.fight = function(opponent){
+  $("#forwardButton").hide();
+  $("#backButton").hide()
+  if(map[player.location].monsters[0]){
+    this.inCombat = true;
+    this.hit(opponent);
+    console.log("You hit the monster for " + this.damage + " leaving him with " + opponent.hp + " hp");
+    if(!opponent.isDead()){
+      opponent.hit(this);
+      console.log("The monster swings for " + opponent.damage + ". You have " + this.hp + "hp.");
+      this.isDead();
+    }
+    else{
+      opponent.dropLoot();
+      game.displayWinScreen();
+    }
+  game.displayAll()
+  }
+  else if(game.playerLocation().friendlies[0]){
+    opponent = game.playerLocation().friendlies[0];
+    this.inCombat = true;
+    this.hit(opponent);
+    console.log("You hit the monster for " + this.damage + " leaving him with " + opponent.hp + " hp");
+    if(!opponent.isDead()){
+      opponent.hit(this);
+      console.log("The monster swings for " + opponent.damage + ". You have " + this.hp + "hp.");
+      this.isDead();
+    }
+    else{
+      opponent.dropLoot();
+      game.displayWinScreen();
+    }
+  game.displayAll()
+  }
+  else{
+    console.log("You see nothing here to fight");
+  }
+}
 
 
 Player.prototype.isDead = function(){
@@ -153,13 +200,30 @@ Player.prototype.displayHealthBar = function(){
 Player.prototype.move = function(input){
   this.previousLocations.push(this.location);
   if(input == "forward"){
-  this.location ++
+    if(!game.gameMap[this.location].monsters[0] || game.gameMap[this.location].monsters[0].isDead()){
+      this.location ++
+    }
+    else{
+      $("#monsters").text("The " + game.gameMap[this.location].monsters[0].name.toLowerCase() + " blocks your way.");
+      return;
+    }
+
   }
   else{
     this.location --
   };
   this.heal(3);
   game.displayAll();  //  game.js line 36
+};
+
+Player.prototype.climbUp = function(){
+  if(!map[player.location].monsters[0] || game.gameMap[this.location].monsters[0].isDead()){
+    player.move("forward");
+    player.move("forward");
+  }
+  else{
+    $("#location").text("The " + game.gameMap.monsters[0].name.toLowerCase() + " blocks your way.")
+  };
 };
 
 Player.prototype.get = function(){
@@ -234,14 +298,63 @@ Player.prototype.sayNo = function(){
   };
 };
 
-Player.prototype.climbUp = function(){
-  if(!map[player.location].monsters[0] || game.gameMap[this.location].monsters[0].isDead()){
-    player.move("forward");
-    player.move("forward");
+Player.prototype.talk = function(){
+  if(game.playerLocation().friendlies[0] == npc){
+    if(!player.quest){
+      npc.talk("Help! I've lost my walking stick! Will You help me get it back?");
+      $("#yesButton").show();
+      $("#noButton").show();
+      $("#fightButton").hide();
+      $("#talkButton").hide();
+    }
+    else if(player.quest == "complete"){
+      npc.talk("Thank you for your help!!");
+    }
+    else{
+      if(player.findQuestItem().name == "Quarterstaff"){
+        player.giveItem(npc);
+        npc.talk("This is great! I was using this sword but it's too heavy as a walking stick. Here, you take it instead.")
+      }
+      else if(player.findQuestItem().name == "walking stick"){
+        player.giveItem(npc)
+        npc.talk("This is even better than the one I had!")
+      }
+      else{
+        if(player.weapon[0].name == "Quarterstaff"){
+          npc.talk("That's fine staff you have in your hands... looks nice and light, much lighter than what I've been using...")
+        }
+        else if(player.weapon[0].name == "walking stick"){
+          npc.talk("That looks just like the one I used to have!")
+        }
+        else{
+        npc.talk("Where's my walking stick?");
+        };
+      };
+    };
   }
-  else{
-    $("#location").text("The " + game.gameMap.monsters[0].name.toLowerCase() + " blocks your way.")
+  else if(game.playerLocation().friendlies[0] == wizard){
+    if(this.weapon[0] == sword || this.inventory.includes(sword)){
+    this.getFortified();
+    wizard.talk("Take my blessing upon your weapon young warrior, you'll need it for your next fight. And while you're here, why don't you drink from the spring?");
+    $("#fightLog").append("Your sword begins to glow.<br><br>")
+    $("#fightLog").append("You feel as though you could run through a tree.")
+    sword.name = "Glowing sword"
+    this.loseBonusDamage(sword);
+    sword.damage = 20;
+    this.addBonusDamage(sword);
+    $("#location").text("The wizard beckons you to drink from a spring and fortify your bones. You do so and feel stronger than ever!")
+    }
+    else{
+      wizard.talk("Bring me a sword, I have a trick or two up my sleeve.")
+    }
+  }
+  else if(game.playerLocation().friendlies[0] == captive){
+    captive.talk("Will you please untie me?");
+    $("#yesButton").show();
+    $("#noButton").show();
   };
-}
+};
+
+
 
 game.getPlayer();

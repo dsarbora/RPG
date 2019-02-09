@@ -1,69 +1,55 @@
 var map = game.gameMap;
 var player = game.players[0];
-map[4].spawnMonster(0);
-map[6].spawnMonster(1);
-map[7].spawnMonster(2);
-map[9].spawnMonster(3);
-map[11].spawnMonster(4)
-map[5].spawnItem(4);
-map[7].spawnItem(4);
-map[2].spawnFriendly(0);
-map[12].spawnFriendly(1);
-map[6].spawnFriendly(2);
+map[4].spawnMonster(0);  //  GOBLIN
+map[6].spawnMonster(1);  //  OGRE
+map[7].spawnMonster(2);  //  SKELETON
+map[9].spawnMonster(3);  //  GOLEM
+map[11].spawnMonster(4); //  DRAGON
+
+map[5].spawnItem(4);   //  POTION
+map[7].spawnItem(4);  //  POTION
+
+map[2].spawnFriendly(0);  // CRONE
+map[12].spawnFriendly(1);  //  CAPTIVE
+map[6].spawnFriendly(2);  //  WIZARD
 
 $(function(){
   $("#startGame").click(function(){
-  $("#titleScreen").hide();
+  $("#titleScreen").hide();  //  TITLE SCREEN CLICKS TO PREGAME / CHOOSE NAME SCREEN
   $("#preGameScreen").fadeIn();
 });
 
 $("#nameForm").submit(function(){
-  event.preventDefault();
-  var name = $("#userName").val();
-  player.name = (name);
-  $("#preGameScreen").hide();
-  $("#gameScreen").fadeIn();
-  game.displayAll();
+  player.getName()  //  PLAYERS.JS LN 23
 });
 
 $("#backButton").click(function(){
-  player.move();
+  player.move();  //  PLAYERS.JS LN 161-178
 });
 
 $("#forwardButton").click(function(){
-  if(!map[player.location].monsters[0] || map[player.location].monsters[0].isDead()){
-    player.move("forward");
-  }
-  else{
-    $("#location").text("The " + map[player.location].monsters[0].name.toLowerCase() + " blocks your way.")
-  }
+  player.move("forward");  //
 });
 
 $("#climbDownButton").click(function(){
-  player.move();
+  player.move();  //
   player.move();
 });
 
 $("#climbUpButton").click(function(){
-  if(!map[player.location].monsters[0] || map[player.location].monsters[0].isDead()){
-    player.move("forward");
-    player.move("forward");
-  }
-  else{
-    $("#location").text("The " + map[player.location].monsters[0].name.toLowerCase() + " blocks your way.")
-  }
+  player.climbUp();  //  PLAYERS.JS LN 180-188
 });
 
 $("#getButton").click(function(){
-  player.get();
+  player.get();  //  PLAYERS.JS LN 190-194
 });
 
 $("#armButton").click(function(){
-  player.armWeapon(player.inventory[0]);
+  player.armWeapon(player.inventory[0]); //  PLAYERS.JS LN 124-134
 });
 
 $("#disarmButton").click(function(){
-  player.disarmWeapon();
+  player.disarmWeapon();  //  PLAYERS.JS LN 141-146
 });
 
 $("#useButton").click(function(){
@@ -71,17 +57,7 @@ $("#useButton").click(function(){
 });
 
 $("#fightButton").click(function(){
-  $("#forwardButton").hide();
-  $("#backButton").hide()
-  if(map[player.location].monsters[0]){
-    player.fight(map[player.location].monsters[0]);
-  }
-  else if(map[player.location].friendlies[0]){
-    player.fight(map[player.location].friendlies[0]);
-  }
-  else{
-    console.log("You see nothing here to fight");
-  }
+  player.fight(map[player.location].monsters[0])
 
 });
 
@@ -90,60 +66,7 @@ $("#userInputForm").submit(function(){
 });
 
 $("#talkButton").click(function(){
-  if(game.playerLocation().friendlies[0] == npc){
-    if(!player.quest){
-      npc.talk("Help! I've lost my walking stick! Will You help me get it back?");
-      $("#yesButton").show();
-      $("#noButton").show();
-      $("#fightButton").hide();
-      $("#talkButton").hide();
-    }
-    else if(player.quest == "complete"){
-      npc.talk("Thank you for your help!!");
-    }
-    else{
-      if(player.findQuestItem().name == "Quarterstaff"){
-        player.giveItem(npc);
-        npc.talk("This is great! I was using this sword but it's too heavy as a walking stick. Here, you take it instead.")
-      }
-      else if(player.findQuestItem().name == "walking stick"){
-        player.giveItem(npc)
-        npc.talk("This is even better than the one I had!")
-      }
-      else{
-        if(player.weapon[0].name == "Quarterstaff"){
-          npc.talk("That's fine staff you have in your hands... looks nice and light, much lighter than what I've been using...")
-        }
-        else if(player.weapon[0].name == "walking stick"){
-          npc.talk("That looks just like the one I used to have!")
-        }
-        else{
-        npc.talk("Where's my walking stick?");
-        };
-      };
-    };
-  }
-  else if(game.playerLocation().friendlies[0] == wizard){
-    if(player.weapon[0] == sword || player.inventory.includes(sword)){
-    player.getFortified();
-    wizard.talk("Take my blessing upon your weapon young warrior, you'll need it for your next fight. And while you're here, why don't you drink from the spring?");
-    $("#fightLog").append("Your sword begins to glow.<br><br>")
-    $("#fightLog").append("You feel as though you could run through a tree.")
-    sword.name = "Glowing sword"
-    player.loseBonusDamage(sword);
-    sword.damage = 20;
-    player.addBonusDamage(sword);
-    $("#location").text("The wizard beckons you to drink from a spring and fortify your bones. You do so and feel stronger than ever!")
-    }
-    else{
-      wizard.talk("Bring me a sword, I have a trick or two up my sleeve.")
-    }
-  }
-  else if(game.playerLocation().friendlies[0] == captive){
-    captive.talk("Will you please untie me?");
-    $("#yesButton").show();
-    $("#noButton").show();
-  }
+  player.talk();
 });
 
 $("#yesButton").click(function(){
