@@ -103,7 +103,7 @@ Game.prototype.displayAll = function(){
 
 Game.prototype.displayWinScreen = function(){
   if(this.monsters[4].hp < 1){
-    $("#..Screen").hide();
+    $("#gameScreen").hide();
     $("#winScreen").fadeIn();
   }
 }

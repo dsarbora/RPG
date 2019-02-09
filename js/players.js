@@ -200,14 +200,13 @@ Player.prototype.displayHealthBar = function(){
 Player.prototype.move = function(input){
   this.previousLocations.push(this.location);
   if(input == "forward"){
-    if(!game.gameMap[this.location].monsters[0] || game.gameMap[this.location].monsters[0].isDead()){
+    if((!game.gameMap[this.location].monsters[0] || game.gameMap[this.location].monsters[0].isDead()) || (this.location == 11 || this.location == 9)){
       this.location ++
     }
     else{
       $("#monsters").text("The " + game.gameMap[this.location].monsters[0].name.toLowerCase() + " blocks your way.");
       return;
     }
-
   }
   else{
     this.location --

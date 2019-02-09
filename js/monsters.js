@@ -1,9 +1,11 @@
 //              MONSTER CONSTRUCTOR AND METHODS
 
-function Monster(name, hp, damage, location){
+function Monster(name, hp, damage, description, action, location){
   this.name = name,
   this.hp = hp,
   this.damage = damage,
+  this.description = monsterDescriptions[Math.floor(Math.random()*monsterDescriptions.length)]
+  this.action = monsterActions[Math.floor(Math.random()*monsterActions.length)]
   this.location = location
 };
 
@@ -44,7 +46,7 @@ Monster.prototype.displayMonster = function(){
   if(this && !this.isDead()){
       $("#fightButton").show();
       $("#fightLog").append(this.name +  ": " + this.hp + "HP" + "<br><br>");
-      $("#monsters").append(monsterDescriptions[Math.floor(Math.random()*monsterDescriptions.length)] + this.name.toLowerCase() + monsterActions[Math.floor(Math.random()*monsterActions.length)]+ "<br><br>")
+      $("#monsters").append(this.description + this.name.toLowerCase() + this.action + "<br><br>")
   }
   else if(this && this.isDead()){
     $("#fightLog").append(this.name +  ": corpse"  + "<br><br>");
