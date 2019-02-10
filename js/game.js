@@ -65,14 +65,14 @@ Game.prototype.displayAll = function(){
   if(!player.inCombat){
     currentLocation.getExits();
   }
-  for(var i = 0; i < player.inventory.length; i++){
+  for (var i = 0; i < player.inventory.length; i++){
     if(player.inventory[i].weapon){
       $("#armButton").show();
       $("#weaponName").text(player.inventory[i].name);
       break;
     }
   };
-  for(var i = 0; i < player.inventory.length; i++){
+  for (var i = 0; i < player.inventory.length; i++){
     if(player.inventory[i].consumable){
       $("#useButton").show();
       $("#itemName").text(player.inventory[i].name);
@@ -88,7 +88,7 @@ Game.prototype.displayAll = function(){
     $("#talkButton").show();
   }
   $("#inventory").text('')
-  for(var i = 0; i < player.inventory.length; i++){
+  for (var i = 0; i < player.inventory.length; i++){
     $("#inventory").append(player.inventory[i].name + "<br>")
   }
   if(currentLocation.rest){

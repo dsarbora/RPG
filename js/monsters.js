@@ -10,7 +10,7 @@ function Monster(name, damage, hp, description, action, location){
 };
 
 Monster.prototype.getHP = function(){
-  for(var i = 0; i < monsterBaseHP.length; i++){
+  for (var i = 0; i < monsterBaseHP.length; i++){
     if(this.name == monsterBaseHP[i][0]){
       this.hp = monsterBaseHP[i][1];
       this.hp += Math.floor(Math.random()*monsterBonusHP[i][1]);
@@ -19,12 +19,25 @@ Monster.prototype.getHP = function(){
   };
 };
 
-Monster.prototype.hit = function(target){
-  target.takeDamage(this.damage);
+Monster.prototype.getDamage = function(){
+  for (var i = 0; i < monsterBaseDamage.length; i++){
+    if(this.name == monsterBaseDamage[i][0])
+    {
+      var damage = monsterBaseDamage[i][1];
+      damage += Math.floor(Math.random()*monsterBonusDamage[i][1]);
+      return damage
+    }
+  }
 }
+
+Monster.prototype.hit = function(target){
+  target.takeDamage(this.getDamage());
+};
+
 Monster.prototype.takeDamage = function(damage){
   this.hp -= damage;
-}
+};
+
 Monster.prototype.isDead = function(){
   if(this.hp < 1){
     console.log("The monster is dead.");

@@ -57,8 +57,10 @@ Player.prototype.fight = function(opponent){
     this.hit(opponent);
     console.log("You hit the monster for " + this.damage + " leaving him with " + opponent.hp + " hp");
     if(!opponent.isDead()){
+      var lastHP = this.hp;
       opponent.hit(this);
-      console.log("The monster swings for " + opponent.damage + ". You have " + this.hp + "hp.");
+      var currentHP = this.hp;
+      console.log("The monster swings for " + (lastHP-currentHP) + ". You have " + this.hp + "hp.");
       this.isDead();
     }
     else{
@@ -68,13 +70,15 @@ Player.prototype.fight = function(opponent){
   game.displayAll()
   }
   else if(game.playerLocation().friendlies[0]){
+    var lastHP = this.hp;
     opponent = game.playerLocation().friendlies[0];
     this.inCombat = true;
     this.hit(opponent);
     console.log("You hit the monster for " + this.damage + " leaving him with " + opponent.hp + " hp");
     if(!opponent.isDead()){
       opponent.hit(this);
-      console.log("The monster swings for " + opponent.damage + ". You have " + this.hp + "hp.");
+      var currentHP = this.hp;
+      console.log("The monster swings for " + (lastHP - currentHP) + ". You have " + this.hp + "hp.");
       this.isDead();
     }
     else{
@@ -153,7 +157,7 @@ Player.prototype.giveItem = function(npc){
 };
 
 Player.prototype.findQuestItem = function(){
-  for(var i = 0; i < this.inventory.length; i++){
+  for (var i = 0; i < this.inventory.length; i++){
     if(this.inventory[i].questItem){
       return this.inventory[i];
     };
@@ -177,7 +181,7 @@ Player.prototype.displayHealthBar = function(){
   $("#HP").text('');
   $("#missingHP").text('');
   this.displayWeapon()
-  for(var i = 0; i<100; i++){
+  for (var i = 0; i<100; i++){
     if(this.hp > i){
       $("#HP").append("|");
     }
@@ -246,7 +250,7 @@ Player.prototype.useItem = function(item){
 };
 
 Player.prototype.findConsumable = function(){
-  for(var i = 0; i < this.inventory.length; i++){
+  for (var i = 0; i < this.inventory.length; i++){
     if(this.inventory[i].consumable){
       return this.inventory[i];
     };

@@ -50,6 +50,21 @@ var monsterBonusHP = [
   ["dragon", 50]
 ];
 
+var monsterBaseDamage = [
+  ["goblin", 10],
+  ["ogre", 13],
+  ["skeleton", 10],
+  ["golem", 15],
+  ["dragon", 30]
+]
+
+var monsterBonusDamage = [
+  ["goblin", 7],
+  ["ogre", 10],
+  ["skeleton", 7],
+  ["golem", 15],
+  ["dragon", 20]
+];
 // // Descriptive Items
 // var bareHandsDesc = "There are tales of great warriors who take down beasts with only their hands, with the strength to tear skull from spine and put an end to the plaguing horrors. Your hands don’t do that, you hit things and it hurts when you do."
 //
