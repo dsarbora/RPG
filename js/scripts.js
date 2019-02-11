@@ -89,14 +89,14 @@ $("#lookButton").click(function(){
   player.look();
 });
 
-$("button").click(function(){
-  game.displayAll();
-  if(player.isTalking){
-    $("#talkButton").hide();
-    $("#yesButton").show();
-    $("#noButton").show();
-  };
-});
+// $("button").click(function(){
+//   game.displayAll();
+//   if(player.isTalking){
+//     $("#talkButton").hide();
+//     $("#yesButton").show();
+//     $("#noButton").show();
+//   };
+// });
 //----------GAME---------------
 $("#titleScreen").fadeIn();
 });

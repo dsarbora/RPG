@@ -7,7 +7,7 @@ function Game(players, monsters, items, gameMap, friendlies){
   this.gameMap = [],
   this.friendlies = []
 }
-
+//---------------GAME-GET-----------------
 Game.prototype.getPlayer = function(){
   var warrior = new Player("You", 60, 25, 60, 35, 15, 50, 50, 50, 10);
   this.players.push(warrior);
@@ -28,11 +28,11 @@ Game.prototype.getMap = function(mapLocation){
 Game.prototype.getFriendly = function(NPC){
   this.friendlies.push(NPC);
 };
-
+//------------FIND-PLAYER--------------------
 Game.prototype.playerLocation = function(){
   return game.gameMap[player.location];
 };
-
+//------------DISPLAY-FUNCTIONS--------------
 Game.prototype.clearDisplays = function(){
   $("#monsters").text('')
   $("#fightLog").text('')
@@ -101,14 +101,14 @@ Game.prototype.displayAll = function(){
   // }
   // $("#backgroundPicture").html(`<img class = 'visual' src = "${this.playerLocation().imgKey}" />`)
 };
-
+//-------------WIN-SCREEN-----------------
 Game.prototype.displayWinScreen = function(){
   if(this.monsters[4].hp < 1){
     $("#gameScreen").hide();
     $("#winScreen").fadeIn();
   }
 }
-
+//-------------GET-USER-INPUT--------------
 Game.prototype.getUserInput = function(){
   event.preventDefault();
   var userInput = $("#userInput").val();

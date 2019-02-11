@@ -1,4 +1,4 @@
-//              PLAYER CHARACTER CONSTRUCTOR AND METHODS
+//============PLAYER-CONSTRUCTOR===================
 function Player(name, hp, damage, strength, dexterity, intelligence, courage, swordsmanship, tactics, hiding, weapon, inventory, inCombat, quest, isFortified, isTalking, takeDamageMultiplier, location, previousLocations){
   this.name = name,
   this.hp = hp,
@@ -20,7 +20,7 @@ function Player(name, hp, damage, strength, dexterity, intelligence, courage, sw
   this.location = 0,
   this.previousLocations = []
 };
-
+//------------GET-NAME----------------
 Player.prototype.getName = function(){
   event.preventDefault();
   var name = $("#userName").val();
@@ -29,7 +29,7 @@ Player.prototype.getName = function(){
   $("#gameScreen").fadeIn();
   game.displayAll();
 }
-
+//------------FIGHTING-METHODS-------------
 Player.prototype.hit = function(target){
   target.takeDamage(this.damage);
 };
@@ -105,7 +105,7 @@ Player.prototype.takeDamage = function(damage){ //  PLAYER TAKE DAMAGE FUNCTION
   this.hp -= (damage * this.takeDamageMultiplier);
   this.displayAll();
 };
-
+//-----------------HEAL-------------------
 Player.prototype.heal = function(healing){   //  PLAYER HEALING FUNCTION
   if(this.hp + healing > 100){
     this.hp = 100;
@@ -120,11 +120,7 @@ Player.prototype.flee = function(){     //
   this.takeDamage(5);
   this.move();
 };
-
-Player.prototype.displayWeapon = function(){  // DISPLAYS ARMED WEAPON IN HTML
-  $("#displayWeapon").text(this.weapon[0].name)
-}
-
+//-------------ARM-AND-DISARM------------------
 Player.prototype.findWeapon = function(){
   for (var i = 0; i < this.inventory.length; i++){
     if(this.inventory[i].weapon){
@@ -134,7 +130,7 @@ Player.prototype.findWeapon = function(){
   return false;
 };
 
-Player.prototype.armWeapon = function(){    //  ARM WEAPON, ONE WEAPON AT A TIME
+Player.prototype.armWeapon = function(){
   if(this.weapon[0] == bareHands){
     var weapon = this.findWeapon();
     this.weapon.unshift(weapon);
@@ -147,18 +143,26 @@ Player.prototype.armWeapon = function(){    //  ARM WEAPON, ONE WEAPON AT A TIME
   game.displayAll();
 };
 
-Player.prototype.changeWeapon = function(){   //  CHANGE WEAPON, GETS CALLED IF WEAPON [] ALREADY HAS AN ITEM - PUSHES CURRENT WEAPON TO INVENTORY
+Player.prototype.changeWeapon = function(){
   this.disarmWeapon();
   this.armWeapon();
 };
 
-Player.prototype.disarmWeapon = function(){      //  DISARMS WEAPON, PUSHES TO INVENTORY
+Player.prototype.disarmWeapon = function(){
   this.loseBonusDamage(this.weapon[0]);
   this.inventory.push(this.weapon[0])
   this.weapon.shift();
   game.displayAll();
 };
 
+Player.prototype.addBonusDamage = function(item){
+  this.damage += item.damage;
+};
+
+Player.prototype.loseBonusDamage = function(item){
+  this.damage -= item.damage;
+};
+//---------------GIVE-ITEM-------------
 Player.prototype.giveItem = function(npc){
   if(this.findQuestItem()){
     this.inventory.splice(this.inventory.indexOf(this.findQuestItem()), 1)
@@ -174,7 +178,7 @@ Player.prototype.findQuestItem = function(){
   };
   return false;
 };
-
+//----------------DISPLAY-METHODS------------
 Player.prototype.displayAll = function(){
   $("#showName").text(this.name)
   $("#showHitPoints").text(this.hp)
@@ -211,6 +215,10 @@ Player.prototype.displayHealthBar = function(){
   };
 };
 
+Player.prototype.displayWeapon = function(){
+  $("#displayWeapon").text(this.weapon[0].name);
+};
+//--------------MOVEMENT-METHODS-------------
 Player.prototype.move = function(input){
   this.previousLocations.push(this.location);
   player.isTalking = false;
@@ -239,19 +247,11 @@ Player.prototype.climbUp = function(){
     $("#location").text("The " + game.gameMap.monsters[0].name.toLowerCase() + " blocks your way.")
   };
 };
-
+//---------------PICKUP-AND-USE-ITEMS-----------
 Player.prototype.get = function(){
   player.inventory.push(map[player.location].items[0]);
   map[player.location].items.shift();
   game.displayAll();
-};
-
-Player.prototype.addBonusDamage = function(item){
-  this.damage += item.damage;
-};
-
-Player.prototype.loseBonusDamage = function(item){
-  this.damage -= item.damage;
 };
 
 Player.prototype.useItem = function(item){
@@ -267,13 +267,13 @@ Player.prototype.findConsumable = function(){
     };
   };
 };
-
+//-----------REST--------------
 Player.prototype.rest = function(){
   this.hp = 100;
   $("#location").text("You feel well rested and healthy again.")
   game.displayAll();
 };
-
+//----------LOOK---------------
 Player.prototype.look = function(){
   game.displayAll();
   if(game.playerLocation().location == 10){
@@ -281,7 +281,7 @@ Player.prototype.look = function(){
     $("#location").append("<br>You move some bushes and see a hidden entrance leading into a cave.");
   };
 };
-
+//-----------FORTIFICATION-----------
 Player.prototype.getFortified = function(){
   this.hp = 100;
   if(!this.isFortified){
@@ -289,7 +289,7 @@ Player.prototype.getFortified = function(){
   }
   game.displayAll();
 }
-
+//------------TALK-TO-NPC-METHODS-----------
 Player.prototype.sayYes = function (){
   player.isTalking = false;
   if(this.location == 2){
@@ -315,7 +315,7 @@ Player.prototype.sayNo = function(){
 
 Player.prototype.talk = function(){
   if(game.playerLocation().friendlies[0] == npc){
-    player.isTalking = true;  //  MAY THROW A BUG WHERE YES/NO BUTTONS WILL APPEAR ATER QUEST IS COMPLETE AND AT WIZARD
+    player.isTalking = true; // YES NO BUTTONS NOW APPEAR EVERY TIME YOU PRESS TALK
     if(!player.quest){
       npc.talk("Help! I've lost my walking stick! Will You help me get it back?");
       $("#yesButton").show();
@@ -370,7 +370,5 @@ Player.prototype.talk = function(){
     $("#noButton").show();
   };
 };
-
-
-
+//-------------GAME-CREATES-PLAYER-------
 game.getPlayer();

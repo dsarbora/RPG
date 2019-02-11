@@ -1,20 +1,19 @@
-
-//              WEAPON CONSTRUCTOR AND METHODS
-function Weapon(name, magic, base, bonus, speed, slayer){
-  this.name = name,
-  this.magic = magic
-  this.base = base,
-  this.bonus = bonus,
-  this.speed = speed,
-  this.slayer = slayer
-}
-//              ARMOR CONSTRUCTOR AND METHODS
-function Armor(name, rating, dexPenalty){
-  this.name = name,
-  this.rating = rating,
-  this.dexPenalty = dexPenalty
-}
-//             HEALING ITEM CONSTRUCTOR AND METHODS
+// //              WEAPON CONSTRUCTOR AND METHODS
+// function Weapon(name, magic, base, bonus, speed, slayer){
+//   this.name = name,
+//   this.magic = magic
+//   this.base = base,
+//   this.bonus = bonus,
+//   this.speed = speed,
+//   this.slayer = slayer
+// }
+// //              ARMOR CONSTRUCTOR AND METHODS
+// function Armor(name, rating, dexPenalty){
+//   this.name = name,
+//   this.rating = rating,
+//   this.dexPenalty = dexPenalty
+// }
+//===========ITEM-CONSTRUCTOR===========
 function Item(name, damage, weapon, consumable, questItem){
   this.name = name,
   this.damage = damage,
@@ -23,8 +22,7 @@ function Item(name, damage, weapon, consumable, questItem){
   this.questItem = !!questItem
 
 }
-
-
+//-----------DISPLAY-NAME---------------
 Item.prototype.displayItem = function(){
   if(this){
     $("#items").text("A " + this.name.toLowerCase() + itemActions[Math.floor(Math.random()*itemActions.length)]);
@@ -36,12 +34,13 @@ Item.prototype.displayItem = function(){
     $("#getButton").hide();
   };
 };
-
+//--------------CREATE-ITEMS-------------
 var bareHands = new Item("Bare hands", 10, "weapon", false, true)
 var sword = new Item("Sword", 10, true);
 var stick = new Item("walking stick", 5, true, false, true);
 var staff = new Item("Quarterstaff", 4, true, false, true)
 var potion = new Item("potion", 10, false, "consumable")
+//--------------GAME-GET-ITEMS-----------
 game.getItem(bareHands);
 game.getItem(sword);
 game.getItem(stick);
