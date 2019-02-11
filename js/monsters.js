@@ -8,7 +8,7 @@ function Monster(name, damage, hp, description, action, location){
   this.action = monsterActions[Math.floor(Math.random()*monsterActions.length)]
   this.location = location
 };
-
+//--------------SPAWN-HP-DETERMINATION-------------
 Monster.prototype.getHP = function(){
   for (var i = 0; i < monsterBaseHP.length; i++){
     if(this.name == monsterBaseHP[i][0]){
@@ -18,7 +18,7 @@ Monster.prototype.getHP = function(){
     };
   };
 };
-
+//---------------MONSTER-FIGHT-METHODS---------------
 Monster.prototype.getDamage = function(){
   for (var i = 0; i < monsterBaseDamage.length; i++){
     if(this.name == monsterBaseDamage[i][0])
@@ -28,7 +28,7 @@ Monster.prototype.getDamage = function(){
       return damage
     }
   }
-}
+};
 
 Monster.prototype.hit = function(target){
   target.takeDamage(this.getDamage());
@@ -37,7 +37,7 @@ Monster.prototype.hit = function(target){
 Monster.prototype.takeDamage = function(damage){
   this.hp -= damage;
 };
-
+//------------CHECK-IF-DEAD--------------
 Monster.prototype.isDead = function(){
   if(this.hp < 1){
     console.log("The monster is dead.");
@@ -49,7 +49,7 @@ Monster.prototype.isDead = function(){
     return false;
   }
 }
-
+//-------------MONSTER-DROP-LOOT----------
 Monster.prototype.dropLoot = function(){
   if(game.playerLocation().location == 4){
     if(player.quest == true){
@@ -64,7 +64,7 @@ Monster.prototype.dropLoot = function(){
   }
   game.displayAll();
 };
-
+//---------------DISPLAY-MONSTER-NAME-AND-HP-ON-SCREEN------------------------------------
 Monster.prototype.displayMonster = function(){
   if(this && !this.isDead()){
       $("#fightButton").show();
@@ -76,46 +76,46 @@ Monster.prototype.displayMonster = function(){
     $("#monsters").append("A " + this.name.toLowerCase() + " is dead. <br><br>")
 
   }
-  //game.displayAll();
 };
+//---------------MONSTER-ART-----------------------
+// Monster.prototype.displayMonsterArt = function(){
+//   if(this && !this.isDead()){
+//     if(this.name == "Goblin"){
+//       $("#goblin").show()
+//     }
+//     else if(this.name == "Ogre"){
+//       $("#ogre").show()
+//     }
+//     else if(this.name == "Skeleton"){
+//       $("#skeleton").show()
+//     }
+//     else if(this.name == "Golem"){
+//       $("#golem").show()
+//     }
+//     else if(this.name == "Dragon"){
+//       $("#dragon").show()
+//     }
+//   }
+//   else{
+//     if(this.name == "Goblin"){
+//       $("#deadGoblin").show()
+//     }
+//     else if(this.name == "Ogre"){
+//       $("#deadOgre").show()
+//     }
+//     else if(this.name == "Skeleton"){
+//       $("#deadSkeleton").show()
+//     }
+//     else if(this.name == "Golem"){
+//       $("#deadGolem").show()
+//     }
+//     else if(this.name == "Dragon"){
+//       $("#deadDragon").show()
+//     };
+//   };
+// };
 
-Monster.prototype.displayMonsterArt = function(){
-  if(this && !this.isDead()){
-    if(this.name == "Goblin"){
-      $("#goblin").show()
-    }
-    else if(this.name == "Ogre"){
-      $("#ogre").show()
-    }
-    else if(this.name == "Skeleton"){
-      $("#skeleton").show()
-    }
-    else if(this.name == "Golem"){
-      $("#golem").show()
-    }
-    else if(this.name == "Dragon"){
-      $("#dragon").show()
-    }
-  }
-  else{
-    if(this.name == "Goblin"){
-      $("#deadGoblin").show()
-    }
-    else if(this.name == "Ogre"){
-      $("#deadOgre").show()
-    }
-    else if(this.name == "Skeleton"){
-      $("#deadSkeleton").show()
-    }
-    else if(this.name == "Golem"){
-      $("#deadGolem").show()
-    }
-    else if(this.name == "Dragon"){
-      $("#deadDragon").show()
-    };
-  };
-};
-
+//----------------------------CREATE-THE-MONSTERS-----------------------------
 var goblin = new Monster("goblin", 18);
 var ogre = new Monster("ogre", 15);
 var skeleton = new Monster("skeleton", 9);
@@ -126,7 +126,7 @@ game.getMonster(ogre);
 game.getMonster(skeleton);
 game.getMonster(golem);
 game.getMonster(dragon);
-
+//======================================NPC===================================
 function NPC(name, hp, damage, description, action, inventory, location,){
   this.name = name,
   this.hp = hp,
@@ -137,7 +137,7 @@ function NPC(name, hp, damage, description, action, inventory, location,){
   this.location = location,
   this.friendly = true
 };
-
+//--------------NPC-FIGHT------------------------
 NPC.prototype.takeDamage = function(damage){
   this.hp -= damage/2;
   console.log(this.name + ": 'Ouch! Why would you do that?''")
@@ -157,7 +157,7 @@ NPC.prototype.isDead = function(){
     return false;
   };
 };
-
+//-----------------NPC-DISPLAY-NAME----------
 NPC.prototype.displayNPC = function(){
   if(this && !this.isDead()){
       //$("#fightButton").show();
@@ -169,15 +169,15 @@ NPC.prototype.displayNPC = function(){
     $("#monsters").append("A " + this.name.toLowerCase() + " is dead. <br><br>")
   }
 };
-
+//-----------------NPC-GIVE-ITEM-------------
 NPC.prototype.giveItem = function(){
   game.players[0].inventory.unshift(this.inventory[0])
   this.inventory.shift()
   game.players[0].quest = "complete";
   game.displayAll();
 }
-
-NPC.prototype.talk = function(output){
+//----------------NPC-TALK--------------
+NPC.prototype.talk = function(output){   //  GETS CALLED AT PLAYERS.JS AT 313 - 368
   $("#monsters").text(this.name + ": " +output);
 }
 

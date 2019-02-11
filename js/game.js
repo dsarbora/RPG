@@ -30,7 +30,8 @@ Game.prototype.getFriendly = function(NPC){
 };
 
 Game.prototype.playerLocation = function(){
-  return game.gameMap[player.location]}
+  return game.gameMap[player.location];
+};
 
 Game.prototype.clearDisplays = function(){
   $("#monsters").text('')
@@ -94,11 +95,11 @@ Game.prototype.displayAll = function(){
   if(currentLocation.rest){
     $("#restButton").show();
   }
-  $("#lookButton").show();
-  if(this.playerLocation().monsters[0]){
-    this.playerLocation().monsters[0].displayMonsterArt();
-  }
-  $("#backgroundPicture").html(`<img class = 'visual' src = "${this.playerLocation().imgKey}" />`)
+  // $("#lookButton").show();
+  // if(this.playerLocation().monsters[0]){
+  //   this.playerLocation().monsters[0].displayMonsterArt();
+  // }
+  // $("#backgroundPicture").html(`<img class = 'visual' src = "${this.playerLocation().imgKey}" />`)
 };
 
 Game.prototype.displayWinScreen = function(){

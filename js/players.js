@@ -1,5 +1,5 @@
 //              PLAYER CHARACTER CONSTRUCTOR AND METHODS
-function Player(name, hp, damage, strength, dexterity, intelligence, courage, swordsmanship, tactics, hiding, weapon, inventory, inCombat, quest, isFortified, takeDamageMultiplier, location, previousLocations){
+function Player(name, hp, damage, strength, dexterity, intelligence, courage, swordsmanship, tactics, hiding, weapon, inventory, inCombat, quest, isFortified, isTalking, takeDamageMultiplier, location, previousLocations){
   this.name = name,
   this.hp = hp,
   this.damage = damage,
@@ -15,6 +15,7 @@ function Player(name, hp, damage, strength, dexterity, intelligence, courage, sw
   this.inCombat = !!inCombat,
   this.quest = !!quest,
   this.isFortified = !!isFortified,
+  this.isTalking = !!isTalking,
   this.takeDamageMultiplier = 1;
   this.location = 0,
   this.previousLocations = []
@@ -92,7 +93,6 @@ Player.prototype.fight = function(opponent){
   }
 }
 
-
 Player.prototype.isDead = function(){
   if(this.hp < 1){
     console.log("You are dead.");
@@ -125,21 +125,31 @@ Player.prototype.displayWeapon = function(){  // DISPLAYS ARMED WEAPON IN HTML
   $("#displayWeapon").text(this.weapon[0].name)
 }
 
-Player.prototype.armWeapon = function(weapon){    //  ARM WEAPON, ONE WEAPON AT A TIME
+Player.prototype.findWeapon = function(){
+  for (var i = 0; i < this.inventory.length; i++){
+    if(this.inventory[i].weapon){
+      return this.inventory[i];
+    };
+  };
+  return false;
+};
+
+Player.prototype.armWeapon = function(){    //  ARM WEAPON, ONE WEAPON AT A TIME
   if(this.weapon[0] == bareHands){
+    var weapon = this.findWeapon();
     this.weapon.unshift(weapon);
     this.inventory.shift();
     this.addBonusDamage(weapon);
   }
   else{
-    this.changeWeapon(weapon)
+    this.changeWeapon(weapon);
   }
   game.displayAll();
 };
 
-Player.prototype.changeWeapon = function(weapon){   //  CHANGE WEAPON, GETS CALLED IF WEAPON [] ALREADY HAS AN ITEM - PUSHES CURRENT WEAPON TO INVENTORY
+Player.prototype.changeWeapon = function(){   //  CHANGE WEAPON, GETS CALLED IF WEAPON [] ALREADY HAS AN ITEM - PUSHES CURRENT WEAPON TO INVENTORY
   this.disarmWeapon();
-  this.armWeapon(weapon);
+  this.armWeapon();
 };
 
 Player.prototype.disarmWeapon = function(){      //  DISARMS WEAPON, PUSHES TO INVENTORY
@@ -203,6 +213,7 @@ Player.prototype.displayHealthBar = function(){
 
 Player.prototype.move = function(input){
   this.previousLocations.push(this.location);
+  player.isTalking = false;
   if(input == "forward"){
     if(!game.gameMap[this.location].monsters[0] || game.gameMap[this.location].monsters[0].isDead() || this.location == 11 || this.location == 9){
       this.location ++;
@@ -280,6 +291,7 @@ Player.prototype.getFortified = function(){
 }
 
 Player.prototype.sayYes = function (){
+  player.isTalking = false;
   if(this.location == 2){
     this.quest = true;
     $("#yesButton").hide();
@@ -303,6 +315,7 @@ Player.prototype.sayNo = function(){
 
 Player.prototype.talk = function(){
   if(game.playerLocation().friendlies[0] == npc){
+    player.isTalking = true;  //  MAY THROW A BUG WHERE YES/NO BUTTONS WILL APPEAR ATER QUEST IS COMPLETE AND AT WIZARD
     if(!player.quest){
       npc.talk("Help! I've lost my walking stick! Will You help me get it back?");
       $("#yesButton").show();
